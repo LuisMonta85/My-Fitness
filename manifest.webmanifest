@@ -1,29 +1,32 @@
 {
-  "id": "./",
+  "id": "/My-Fitness/fitness-v2",
   "name": "Mi Control Fitness",
   "short_name": "Fitness",
   "description": "Entrena, registra tus pesos y sigue tus progresos.",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/My-Fitness/",
+  "scope": "/My-Fitness/",
   "display": "standalone",
+  "display_override": [
+    "standalone"
+  ],
   "orientation": "portrait",
   "background_color": "#f3f6fa",
   "theme_color": "#142d46",
   "icons": [
     {
-      "src": "./icons/icon-192.png",
+      "src": "/My-Fitness/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-512.png",
+      "src": "/My-Fitness/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-512-maskable.png",
+      "src": "/My-Fitness/icons/icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
