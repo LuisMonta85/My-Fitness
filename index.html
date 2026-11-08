@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#142d46"><title>Mi Control Fitness</title>
+<style>
+:root{--navy:#142d46;--blue:#2186ae;--cyan:#e8f5fa;--bg:#f3f6fa;--ink:#1c2b39;--muted:#6b7a89;--line:#e1e8ef;--green:#15966b;--orange:#d97706;--card:#fff;--shadow:0 8px 28px #17365d12}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(120deg,#142d46,#1d5878);color:white;padding:20px max(18px,calc((100% - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:13px;background:#ffffff20;display:grid;place-items:center;font-size:23px}.brand h1{font-size:20px;margin:0}.brand p{margin:2px 0 0;color:#c7dce9;font-size:12px}
+header button{background:#ffffff18;color:white;border:1px solid #ffffff40}
+nav{display:flex;gap:6px;overflow:auto;padding:10px max(12px,calc((100% - 1120px)/2));background:white;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav button{white-space:nowrap;border:0;background:transparent;color:var(--muted);padding:10px 13px;border-radius:10px;font-weight:650}
+nav button.active{background:var(--cyan);color:#176487}
+main{max-width:1120px;margin:22px auto;padding:0 16px 60px}
+h2{font-size:24px;margin:0 0 5px}h3{margin:0 0 10px;font-size:17px}.sub{color:var(--muted);margin:0 0 18px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:var(--shadow);min-width:0}.metric{font-size:27px;font-weight:800;margin-top:5px}.muted{color:var(--muted);font-size:13px}.section{margin-top:22px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.stack{display:grid;gap:10px}
+button,.btn{cursor:pointer;border-radius:10px;border:1px solid var(--line);background:white;color:var(--ink);padding:10px 13px;font-weight:650;font-size:14px}
+button.primary,.primary{background:var(--blue);border-color:var(--blue);color:white}.danger{color:#b42318;border-color:#f1c8c5}.pill{display:inline-flex;padding:4px 9px;border-radius:20px;background:var(--cyan);color:#176487;font-size:12px;font-weight:700}
+input,select,textarea{width:100%;border:1px solid #cfd9e3;border-radius:9px;padding:10px;background:white;color:var(--ink);font:inherit}
+label{font-size:12px;color:var(--muted);font-weight:700;display:block;margin-bottom:5px}
+.formgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.exercise{display:grid;grid-template-columns:minmax(0,1fr) 105px 105px;gap:9px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.exercise:last-child{border:0}.exercise strong{display:block}.exercise small{color:var(--muted)}
+.day{border-left:4px solid var(--blue)}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.tabs button.selected{background:var(--navy);color:white}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-size:11px;text-transform:uppercase}
+.empty{padding:28px;text-align:center;color:var(--muted)}.notice{background:#fff8e8;border:1px solid #f2dfb7;padding:12px;border-radius:12px;color:#7a5312;font-size:13px}
+.progress{height:8px;border-radius:20px;background:#e7edf2;overflow:hidden}.progress span{display:block;height:100%;background:var(--green)}
+footer{max-width:1120px;margin:0 auto;padding:0 16px 25px;color:var(--muted);font-size:12px}
+.hidden{display:none!important}.actions{display:flex;gap:8px;flex-wrap:wrap}.routine-card{cursor:pointer;transition:.15s}.routine-card:hover{transform:translateY(-2px);border-color:#8dc8dd}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:1fr 1fr}.exercise{grid-template-columns:minmax(0,1fr) 82px 82px;gap:6px}.exercise input{padding:8px 6px}.card{padding:14px}main{margin-top:16px}}
+@media(max-width:420px){.formgrid{grid-template-columns:1fr 1fr}.metric{font-size:23px}.brand h1{font-size:17px}}
+</style></head>
+<body>
+<header><div class="brand"><div class="logo">🏋️</div><div><h1>Mi Control Fitness</h1><p>Entrena · registra · progresa</p></div></div><button id="backupTop">Copia de seguridad</button></header>
+<nav id="nav">
+<button data-page="inicio" class="active">⌂ Inicio</button><button data-page="rutinas">▦ Rutinas</button><button data-page="entrenar">＋ Entrenar</button><button data-page="historial">◷ Historial</button><button data-page="progreso">↗ Progresos</button><button data-page="ajustes">⚙ Ajustes</button>
+</nav>
+<main>
+<section id="page-inicio">
+<div class="row"><div><h2>Tu entrenamiento</h2><p class="sub">Un espacio para controlar tus sesiones y mejorar semana a semana.</p></div><button class="primary" onclick="showPage('entrenar')">＋ Registrar sesión</button></div>
+<div class="grid" id="metrics"></div>
+<div class="section grid" style="grid-template-columns:1.2fr .8fr">
+<div class="card"><div class="row"><h3>Últimos entrenamientos</h3><button onclick="showPage('historial')">Ver todos</button></div><div id="recent"></div></div>
+<div class="card"><h3>Tu material</h3><div class="stack muted"><span>▰ Banco reclinable</span><span>◈ Mancuernas</span><span>● Pesa rusa</span><span>〰 Barra Z y discos</span></div><p class="muted">Rutinas adaptadas a este equipo. Sin barra de dominadas ni máquinas.</p></div>
+</div>
+<div class="section card"><h3>Plan recomendado</h3><p class="muted">Entrena 3 días por semana dejando al menos un día de recuperación entre sesiones (por ejemplo, lunes, miércoles y viernes).</p><div class="progress"><span id="weekbar" style="width:0%"></span></div><p class="muted" id="weekcount">0 de 3 sesiones registradas esta semana</p></div>
+</section>
+<section id="page-rutinas" class="hidden">
+<h2>Biblioteca de rutinas</h2><p class="sub">Cinco programas de tres días. Puedes cambiar de programa cuando quieras; tus registros anteriores se conservan.</p>
+<div id="routineList" class="grid" style="grid-template-columns:repeat(2,1fr)"></div>
+<div id="routineDetail" class="section"></div>
+</section>
+<section id="page-entrenar" class="hidden">
+<h2>Registrar entrenamiento</h2><p class="sub">Guarda el peso y las repeticiones reales de cada ejercicio.</p>
+<div class="card stack">
+<div class="formgrid"><div><label>Fecha</label><input id="sessionDate" type="date"></div><div><label>Rutina</label><select id="sessionRoutine"></select></div><div><label>Día</label><select id="sessionDay"></select></div></div>
+<div class="notice">En mancuernas registra los kg por mancuerna. En barra Z usa siempre el mismo criterio (preferiblemente peso total). Para ejercicios sin carga, deja el peso a 0 y registra repeticiones o segundos.</div>
+<div id="sessionExercises"></div>
+<div><label>Notas de la sesión</label><textarea id="sessionNotes" rows="2" placeholder="Sensaciones, ajustes, molestias o comentarios..."></textarea></div>
+<button class="primary" id="saveSession">Guardar entrenamiento</button>
+</div></section>
+<section id="page-historial" class="hidden"><h2>Historial</h2><p class="sub">Todas tus sesiones guardadas, con opción de consultar o eliminar.</p><div class="card" id="historyList"></div></section>
+<section id="page-progreso" class="hidden"><h2>Progresos</h2><p class="sub">Consulta la evolución de tus cargas por ejercicio.</p><div class="card stack"><div><label>Ejercicio</label><select id="progressExercise"></select></div><div id="progressChart"></div><div id="progressTable"></div></div></section>
+<section id="page-ajustes" class="hidden"><h2>Ajustes y datos</h2><p class="sub">Personaliza tus datos y protege tus registros.</p><div class="grid" style="grid-template-columns:1fr 1fr">
+<div class="card stack"><h3>Datos iniciales</h3><div><label>Peso corporal (kg)</label><input id="bodyWeight" type="number" step=".1"></div><div><label>Grasa corporal (%)</label><input id="bodyFat" type="number" step=".1"></div><button class="primary" id="saveProfile">Guardar datos</button></div>
+<div class="card stack"><h3>Material disponible</h3><p class="muted">La biblioteca está configurada para:</p><p>Banco reclinable · Mancuernas · Pesa rusa · Barra Z con discos.</p><p class="muted">Si incorporas nuevo material, podrás adaptar las rutinas en futuras versiones.</p></div>
+</div>
+<div class="section card stack"><h3>Copias de seguridad</h3><p class="muted">Los datos se guardan en este navegador. Exporta un archivo JSON con tus sesiones y ajustes para conservarlos o trasladarlos a otro dispositivo.</p><div class="actions"><button class="primary" id="exportBtn">Exportar copia JSON</button><label class="btn" style="margin:0">Importar copia JSON<input type="file" id="importFile" accept=".json,application/json" hidden></label><button class="danger" id="clearBtn">Borrar todos los datos</button></div><p class="muted" id="storageStatus"></p></div>
+</section>
+</main><footer>Mi Control Fitness · Aplicación personal. Los datos se almacenan localmente en este navegador. Guarda copias de seguridad periódicas.</footer>
+<script>
+const ROUTINES = [
+{id:"A",name:"Rutina A · Base equilibrada",tag:"La rutina original",desc:"Empuje, tirón y piernas. Buen punto de partida para consolidar técnica y fuerza.",days:[
+{name:"Día 1 · Empuje",ex:[["Press de pecho con mancuernas","4 × 8–12","Pecho"],["Press inclinado con mancuernas","3 × 8–12","Pecho"],["Press militar con mancuernas","3 × 8–12","Hombros"],["Elevaciones laterales","3 × 12–15","Hombros"],["Flexiones","3 × 8–15","Calistenia"],["Extensión de tríceps con barra Z","2 × 10–12","Tríceps"]]},
+{name:"Día 2 · Tirón",ex:[["Remo inclinado con barra Z","4 × 8–12","Espalda"],["Remo con mancuerna a una mano","3 × 10–12/lado","Espalda"],["Pullover con mancuerna","3 × 10–12","Espalda"],["Curl de bíceps con barra Z","3 × 8–12","Bíceps"],["Curl martillo","2 × 10–12","Bíceps"],["Plancha","3 × 30–45 s","Core"]]},
+{name:"Día 3 · Piernas y core",ex:[["Sentadilla goblet con pesa rusa","4 × 10–15","Piernas"],["Peso muerto rumano con barra Z","4 × 8–12","Piernas"],["Zancadas con mancuernas","3 × 10/pierna","Piernas"],["Puente de glúteos con peso","3 × 12–15","Glúteos"],["Elevación de gemelos","3 × 15–20","Piernas"],["Dead bug","3 × 10/lado","Core"]]}]},
+{id:"B",name:"Rutina B · Torso / Pierna / Full body",tag:"Variación de volumen",desc:"Reparte el trabajo de torso y piernas, con una tercera sesión global.",days:[
+{name:"Día 1 · Torso",ex:[["Press de pecho con mancuernas","4 × 8–10","Pecho"],["Remo con mancuerna a una mano","4 × 10/lado","Espalda"],["Press inclinado con mancuernas","3 × 10–12","Pecho"],["Pájaros con mancuernas","3 × 12–15","Hombro posterior"],["Curl alterno","3 × 10–12","Bíceps"],["Flexiones cerradas","2 × 8–12","Tríceps"]]},
+{name:"Día 2 · Pierna",ex:[["Sentadilla goblet","4 × 10–12","Piernas"],["Peso muerto rumano con mancuernas","4 × 10","Isquios"],["Step-up al banco bajo y estable","3 × 8/pierna","Piernas"],["Hip thrust en banco","3 × 12–15","Glúteos"],["Gemelos de pie","3 × 15–20","Piernas"],["Bird dog","3 × 10/lado","Core"]]},
+{name:"Día 3 · Full body",ex:[["Press militar sentado","3 × 8–12","Hombros"],["Remo inclinado con barra Z","3 × 10–12","Espalda"],["Peso muerto sumo con pesa rusa","3 × 10–12","Piernas"],["Press de suelo con mancuernas","3 × 10–12","Pecho"],["Curl martillo","2 × 12","Bíceps"],["Plancha lateral","3 × 20–30 s/lado","Core"]]}]},
+{id:"C",name:"Rutina C · Fuerza controlada",tag:"Menos repeticiones",desc:"Movimientos básicos con rangos moderados. Prioriza técnica, descansos amplios y progresión gradual.",days:[
+{name:"Día 1 · Empuje",ex:[["Press de pecho con mancuernas","4 × 6–8","Pecho"],["Press militar sentado","3 × 6–8","Hombros"],["Press cerrado con mancuernas","3 × 8–10","Tríceps"],["Flexiones","3 × 8–12","Calistenia"],["Elevaciones laterales","2 × 12–15","Hombros"]]},
+{name:"Día 2 · Tirón",ex:[["Remo con barra Z","4 × 6–8","Espalda"],["Remo apoyado en banco","3 × 8/lado","Espalda"],["Peso muerto rumano con barra Z","3 × 8","Cadena posterior"],["Curl con barra Z","3 × 8–10","Bíceps"],["Plancha","3 × 30–45 s","Core"]]},
+{name:"Día 3 · Piernas",ex:[["Sentadilla goblet","4 × 8–10","Piernas"],["Hip thrust con peso","4 × 8–10","Glúteos"],["Peso muerto sumo con pesa rusa","3 × 8–10","Piernas"],["Zancada atrás","2 × 8/pierna","Piernas"],["Dead bug","3 × 10/lado","Core"]]}]},
+{id:"D",name:"Rutina D · Hipertrofia",tag:"Más variedad y repeticiones",desc:"Volumen moderado-alto para estimular el crecimiento muscular. No llegues al fallo en todas las series.",days:[
+{name:"Día 1 · Pecho, hombro y tríceps",ex:[["Press inclinado con mancuernas","4 × 10–12","Pecho"],["Press de pecho plano","3 × 10–12","Pecho"],["Aperturas con mancuernas","3 × 12–15","Pecho"],["Elevaciones laterales","3 × 15","Hombros"],["Extensión de tríceps tumbado con barra Z","3 × 10–12","Tríceps"],["Flexiones","2 × máximo técnico","Calistenia"]]},
+{name:"Día 2 · Espalda y bíceps",ex:[["Remo con barra Z","4 × 10–12","Espalda"],["Remo con mancuerna","3 × 12/lado","Espalda"],["Pullover","3 × 12–15","Espalda"],["Pájaros con mancuernas","3 × 15","Hombro posterior"],["Curl con barra Z","3 × 10–12","Bíceps"],["Curl martillo","2 × 12–15","Bíceps"]]},
+{name:"Día 3 · Pierna y abdomen",ex:[["Sentadilla goblet","4 × 12–15","Piernas"],["Peso muerto rumano","3 × 10–12","Isquios"],["Zancadas atrás","3 × 10/pierna","Piernas"],["Hip thrust","3 × 12–15","Glúteos"],["Gemelos","4 × 15–20","Piernas"],["Crunch inverso","3 × 12–15","Core"]]}]},
+{id:"E",name:"Rutina E · Full body",tag:"Tres sesiones globales",desc:"Entrena todo el cuerpo cada día con menos ejercicios por grupo. Útil para semanas con agenda apretada.",days:[
+{name:"Día 1 · Full body 1",ex:[["Sentadilla goblet","3 × 10–12","Piernas"],["Press de pecho con mancuernas","3 × 8–12","Pecho"],["Remo con barra Z","3 × 10–12","Espalda"],["Peso muerto rumano con mancuernas","2 × 10","Isquios"],["Curl martillo","2 × 12","Bíceps"],["Plancha","3 × 30 s","Core"]]},
+{name:"Día 2 · Full body 2",ex:[["Peso muerto sumo con pesa rusa","3 × 10","Piernas"],["Press militar sentado","3 × 8–12","Hombros"],["Remo a una mano","3 × 10/lado","Espalda"],["Flexiones","3 × 8–15","Calistenia"],["Hip thrust","3 × 12","Glúteos"],["Dead bug","3 × 10/lado","Core"]]},
+{name:"Día 3 · Full body 3",ex:[["Zancada atrás con mancuernas","3 × 10/pierna","Piernas"],["Press inclinado con mancuernas","3 × 10","Pecho"],["Pullover","3 × 12","Espalda"],["Elevaciones laterales","3 × 15","Hombros"],["Curl con barra Z","2 × 10–12","Bíceps"],["Extensión tríceps con mancuerna","2 × 12","Tríceps"]]}]}
+];
+const KEY="mi_control_fitness_v1";
+let state=load();
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{sessions:[],profile:{weight:72.5,fat:18.4},activeRoutine:"A"}}catch(e){return {sessions:[],profile:{weight:72.5,fat:18.4},activeRoutine:"A"}}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(state));}
+function showPage(p){document.querySelectorAll("main section").forEach(x=>x.classList.add("hidden"));document.getElementById("page-"+p).classList.remove("hidden");document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===p));if(p==="inicio")renderHome();if(p==="rutinas")renderRoutines();if(p==="historial")renderHistory();if(p==="progreso")renderProgress();}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+const $=id=>document.getElementById(id);
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function weekCount(){let now=new Date(),day=(now.getDay()+6)%7;let monday=new Date(now);monday.setDate(now.getDate()-day);monday.setHours(0,0,0,0);return state.sessions.filter(s=>new Date(s.date+"T12:00:00")>=monday).length;}
+function renderHome(){let n=state.sessions.length,last=state.sessions.slice().sort((a,b)=>b.date.localeCompare(a.date))[0];$("metrics").innerHTML=`<div class="card"><div class="muted">Peso corporal</div><div class="metric">${state.profile.weight||"—"} kg</div></div><div class="card"><div class="muted">Grasa corporal</div><div class="metric">${state.profile.fat||"—"}%</div></div><div class="card"><div class="muted">Sesiones guardadas</div><div class="metric">${n}</div></div><div class="card"><div class="muted">Última sesión</div><div class="metric" style="font-size:18px">${last?fmt(last.date):"—"}</div></div>`;
+$("recent").innerHTML=state.sessions.length?state.sessions.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4).map(s=>`<p><strong>${esc(s.dayName)}</strong><br><span class="muted">${fmt(s.date)} · ${esc(s.routineName)}</span></p>`).join(""):`<div class="empty">Todavía no has registrado sesiones.</div>`;
+let wc=Math.min(weekCount(),3);$("weekbar").style.width=(wc/3*100)+"%";$("weekcount").textContent=`${wc} de 3 sesiones registradas esta semana`;}
+function fmt(d){return new Date(d+"T12:00:00").toLocaleDateString("es-ES",{day:"2-digit",month:"short",year:"numeric"});}
+function renderRoutines(){let active=state.activeRoutine;$("routineList").innerHTML=ROUTINES.map(r=>`<div class="card routine-card" onclick="selectRoutine('${r.id}')"><div class="row"><span class="pill">${r.tag}</span>${active===r.id?'<span class="pill" style="background:#e4f5ec;color:#13734f">Activa</span>':""}</div><h3 style="margin-top:12px">${r.name}</h3><p class="muted">${r.desc}</p><p class="muted">3 días · ${r.days.reduce((a,d)=>a+d.ex.length,0)} ejercicios</p></div>`).join("");let r=ROUTINES.find(x=>x.id===active)||ROUTINES[0];$("routineDetail").innerHTML=`<div class="card"><div class="row"><h3>${r.name}</h3><button class="primary" onclick="activateRoutine('${r.id}')">Usar esta rutina</button></div>${r.days.map((d,i)=>`<div class="section"><h3>${d.name}</h3>${d.ex.map(e=>`<p><strong>${e[0]}</strong> <span class="muted">· ${e[1]} · ${e[2]}</span></p>`).join("")}</div>`).join("")}</div>`;}
+function selectRoutine(id){state.activeRoutine=id;persist();renderRoutines();}
+function activateRoutine(id){state.activeRoutine=id;persist();$("sessionRoutine").value=id;fillDays();renderRoutines();alert("Rutina seleccionada para tus próximos entrenamientos.");}
+function fillDays(){let r=ROUTINES.find(x=>x.id===$("sessionRoutine").value)||ROUTINES[0];$("sessionDay").innerHTML=r.days.map((d,i)=>`<option value="${i}">${d.name}</option>`).join("");renderSessionExercises();}
+function renderSessionExercises(){let r=ROUTINES.find(x=>x.id===$("sessionRoutine").value)||ROUTINES[0],d=r.days[+$("sessionDay").value||0];$("sessionExercises").innerHTML=`<h3 style="margin-top:14px">${d.name}</h3>`+d.ex.map((e,i)=>`<div class="exercise"><div><strong>${esc(e[0])}</strong><small>${esc(e[1])} · ${esc(e[2])}</small></div><div><label>Kg</label><input type="number" min="0" step=".5" class="kg" data-i="${i}" placeholder="0"></div><div><label>Reps / seg.</label><input type="text" class="reps" data-i="${i}" placeholder="12,12,10"></div></div>`).join("");}
+$("sessionRoutine").innerHTML=ROUTINES.map(r=>`<option value="${r.id}">${r.name}</option>`).join("");$("sessionRoutine").value=state.activeRoutine;$("sessionRoutine").addEventListener("change",fillDays);$("sessionDay").addEventListener("change",renderSessionExercises);$("sessionDate").value=new Date().toISOString().slice(0,10);fillDays();
+$("saveSession").onclick=()=>{let r=ROUTINES.find(x=>x.id===$("sessionRoutine").value),di=+$("sessionDay").value,d=r.days[di],entries=d.ex.map((e,i)=>({exercise:e[0],target:e[1],category:e[2],kg:parseFloat(document.querySelector(`.kg[data-i="${i}"]`).value)||0,reps:document.querySelector(`.reps[data-i="${i}"]`).value.trim()}));if(!entries.some(x=>x.reps||x.kg)){alert("Introduce al menos un peso o una repetición.");return;}state.sessions.push({id:Date.now(),date:$("sessionDate").value,routineId:r.id,routineName:r.name,dayName:d.name,entries,notes:$("sessionNotes").value});persist();$("sessionNotes").value="";alert("Entrenamiento guardado.");showPage("inicio");};
+function renderHistory(){let list=state.sessions.slice().sort((a,b)=>b.date.localeCompare(a.date));$("historyList").innerHTML=list.length?list.map(s=>`<details style="padding:12px 0;border-bottom:1px solid var(--line)"><summary><strong>${esc(s.dayName)}</strong> · ${fmt(s.date)} <span class="muted">· ${esc(s.routineName)}</span></summary><div style="overflow:auto"><table><thead><tr><th>Ejercicio</th><th>Kg</th><th>Reps / seg.</th></tr></thead><tbody>${s.entries.map(e=>`<tr><td>${esc(e.exercise)}</td><td>${e.kg}</td><td>${esc(e.reps||"—")}</td></tr>`).join("")}</tbody></table></div>${s.notes?`<p class="muted">Notas: ${esc(s.notes)}</p>`:""}<button class="danger" onclick="deleteSession(${s.id})">Eliminar sesión</button></details>`).join(""):`<div class="empty">No hay sesiones registradas.</div>`;}
+function deleteSession(id){if(confirm("¿Eliminar esta sesión?")){state.sessions=state.sessions.filter(s=>s.id!==id);persist();renderHistory();}}
+function allExercises(){return [...new Set(state.sessions.flatMap(s=>s.entries.map(e=>e.exercise)))].sort();}
+function renderProgress(){let ex=allExercises();$("progressExercise").innerHTML=ex.length?ex.map(e=>`<option>${esc(e)}</option>`).join(""):`<option value="">Aún no hay registros</option>`;drawProgress();}
+$("progressExercise").onchange=drawProgress;
+function drawProgress(){let name=$("progressExercise").value;if(!name){$("progressChart").innerHTML='<div class="empty">Registra entrenamientos para ver tu evolución.</div>';$("progressTable").innerHTML="";return;}let rows=state.sessions.flatMap(s=>s.entries.filter(e=>e.exercise===name).map(e=>({date:s.date,kg:e.kg,reps:e.reps}))).sort((a,b)=>a.date.localeCompare(b.date));let max=Math.max(1,...rows.map(x=>x.kg));$("progressChart").innerHTML=`<div style="display:flex;align-items:end;gap:7px;height:150px;padding:10px 0">${rows.map(x=>`<div title="${fmt(x.date)} · ${x.kg} kg" style="flex:1;min-width:12px;text-align:center"><div style="height:${Math.max(4,x.kg/max*115)}px;background:#2186ae;border-radius:5px 5px 0 0"></div><small class="muted">${x.kg}</small></div>`).join("")}</div><p class="muted">Barras: carga registrada por sesión (no compara ejercicios distintos).</p>`;$("progressTable").innerHTML=`<table><thead><tr><th>Fecha</th><th>Peso</th><th>Repeticiones</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${fmt(x.date)}</td><td>${x.kg} kg</td><td>${esc(x.reps||"—")}</td></tr>`).join("")}</tbody></table>`;}
+$("bodyWeight").value=state.profile.weight;$("bodyFat").value=state.profile.fat;$("saveProfile").onclick=()=>{state.profile={weight:parseFloat($("bodyWeight").value)||"",fat:parseFloat($("bodyFat").value)||""};persist();alert("Datos actualizados.");renderHome();};
+function exportData(){let blob=new Blob([JSON.stringify({app:"Mi Control Fitness",version:1,exportedAt:new Date().toISOString(),data:state},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="mi-control-fitness-copia-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(a.href);}
+$("exportBtn").onclick=exportData;$("backupTop").onclick=exportData;
+$("importFile").onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let j=JSON.parse(await f.text());let d=j.data||j;if(!Array.isArray(d.sessions)||!d.profile)throw Error();if(confirm("Importar esta copia reemplazará los datos actuales de esta app. ¿Continuar?")){state=d;persist();location.reload();}}catch(err){alert("No se ha podido importar. Comprueba que sea una copia JSON válida de Mi Control Fitness.");}e.target.value="";};
+$("clearBtn").onclick=()=>{if(confirm("¿Seguro? Se borrarán todas las sesiones y ajustes guardados en este navegador. Exporta antes una copia si quieres conservarlos.")){localStorage.removeItem(KEY);state=load();location.reload();}};
+$("storageStatus").textContent="Almacenamiento local activo · "+(localStorage.getItem(KEY)?"Hay datos guardados en este navegador.":"Aún no hay registros guardados.");
+renderHome();
+</script></body></html>
