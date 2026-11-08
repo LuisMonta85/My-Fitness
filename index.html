@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#142d46"><title>Mi Control Fitness</title>
+<meta name="theme-color" content="#142d46"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-192.png"><title>Mi Control Fitness</title>
 <style>
 :root{--navy:#142d46;--blue:#2186ae;--cyan:#e8f5fa;--bg:#f3f6fa;--ink:#1c2b39;--muted:#6b7a89;--line:#e1e8ef;--green:#15966b;--orange:#d97706;--card:#fff;--shadow:0 8px 28px #17365d12}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
@@ -126,4 +126,11 @@ $("importFile").onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let 
 $("clearBtn").onclick=()=>{if(confirm("¿Seguro? Se borrarán todas las sesiones y ajustes guardados en este navegador. Exporta antes una copia si quieres conservarlos.")){localStorage.removeItem(KEY);state=load();location.reload();}};
 $("storageStatus").textContent="Almacenamiento local activo · "+(localStorage.getItem(KEY)?"Hay datos guardados en este navegador.":"Aún no hay registros guardados.");
 renderHome();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(err => console.warn("No se pudo registrar el modo offline:", err));
+  });
+}
 </script></body></html>
